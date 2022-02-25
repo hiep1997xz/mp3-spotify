@@ -1,6 +1,19 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { Songs } from "../context/context";
 
 const ListSong = () => {
+  const { handleSong, song, DataSongs } = useContext(Songs);
+  const [idSong, setIdSong] = useState(0);
+
+  const handlePlaySong = (idSong) => {
+    setIdSong(idSong);
+    handleSong(idSong);
+  };
+
+  useEffect(() => {
+    setIdSong(idSong);
+  }, [song]);
+
   return (
     <div className="col-span-2  overflow-y-scroll">
       <table className="table-auto w-full">
@@ -15,13 +28,24 @@ const ListSong = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className="text-center">1</td>
-            <td>2</td>
-            <td className="text-center">3</td>
-            <td className="text-center">4</td>
-            <td className="text-center">5</td>
-          </tr>
+          {DataSongs.map((song, index) => (
+            <tr
+              key={index}
+              className={`bg-slate-800 h-12 text-gray-500 hover:bg-slate-600 ${
+                idSong === song.id && "bg-slate-600 text-teal-400"
+              }`}
+              onClick={() => handlePlaySong(song.id)}
+            >
+              <td className="text-center">{index + 1}</td>
+              <td>{song.name}</td>
+              <td className="text-center">{song.author}</td>
+              <td className="text-center">
+                <a href={song.url}>
+                  <i className="fa fa-download"></i>
+                </a>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
